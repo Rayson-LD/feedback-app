@@ -1,15 +1,25 @@
 import {createContext} from 'react'
-import FeedbackItemList from '../feedback/FeedbackItem'
 import {v4 as uuidv4} from 'uuid'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 const FeedbackContext = createContext()
 export const FeedbackProvider = ({children}) =>
 {
+    const  [isLoading, setisLoading] = useState(false);
     const  [editFeedback, seteditFeedback] = useState({
         item:{},
         edit:false,
     })
-    const [feedback,setItem] = useState(FeedbackItemList)
+    const [feedback,setItem] = useState([])
+
+     useEffect(()=>{
+        Fetch()
+    },[])
+    const Fetch = async () =>{
+        const respnose = await Fetch('http://localhost:5000/feedback')
+        const data = respnose.json
+        setItem(data)
+        setisLoading(true)
+    }
     const setDelete = (id) =>{
         if(window.confirm('Are you sure you want to delete'))
         {
@@ -33,6 +43,7 @@ export const FeedbackProvider = ({children}) =>
     return <FeedbackContext.Provider value={{
         feedback,
         setDelete,
+        isLoading,
         setAdd,
         setEdit,
         editFeedback,
