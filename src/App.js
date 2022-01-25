@@ -1,8 +1,4 @@
 import Header from  './components/Header'
-<<<<<<< HEAD
-//import FeedbackItem from './components/FeedbackItem'
-=======
->>>>>>> 2438aeee5c27f98f8c462ec3ad3d3466a82f052e
 import FeedbackList from './components/FeedbackList'
 import FeedbackStats from './components/FeedbackStats'
 import FeedbackForm from './components/FeedbackForm'
@@ -13,9 +9,6 @@ import  { FeedbackProvider } from './Context/FeedbackContext'
 
 function App()
 {
-  
-   
-  
  return(
      <FeedbackProvider>
      <Router>

@@ -1,5 +1,4 @@
 import {createContext} from 'react'
-import {v4 as uuidv4} from 'uuid'
 import { useState,useEffect } from 'react'
 const FeedbackContext = createContext()
 export const FeedbackProvider = ({children}) =>
@@ -15,20 +14,28 @@ export const FeedbackProvider = ({children}) =>
         Fetch()
     },[])
     const Fetch = async () =>{
-        const respnose = await Fetch('http://localhost:5000/feedback')
-        const data = respnose.json
+        const respnose = await fetch('/feedback')
+        const data = await respnose.json()
         setItem(data)
         setisLoading(true)
     }
-    const setDelete = (id) =>{
+    const setDelete = async (id) =>{
+        await fetch(`/feedback/${id}`,{method:'DELETE'})
         if(window.confirm('Are you sure you want to delete'))
         {
             setItem(feedback.filter((item) => item.id !== id))
         }
        }
-       const setAdd = (newFeedback) =>{
-        newFeedback.id = uuidv4()
-        setItem([newFeedback,...feedback])
+       const setAdd = async (newFeedback) =>{
+           const response = await fetch("/feedback",{
+               method:"POST",
+               headers:{
+                   'Content-Type':"application/json"
+               },
+               body: JSON.stringify(newFeedback),
+           })
+       const data = await response.json()
+        setItem([data,...feedback])
    }
    const setEdit = (item) =>
    {
@@ -37,8 +44,16 @@ export const FeedbackProvider = ({children}) =>
            edit:true
        })
    }
-   const updateFeedback = (id,updId) => {
-       setItem(feedback.map((item) => (item.id === id ? {...item,...updId }: item)))
+   const updateFeedback = async(id,updId) => {
+    const response = await fetch(`/feedback/${id}`,{
+        method:"PUT",
+        headers:{
+            'Content-Type':"application/json"
+        },
+        body: JSON.stringify(updId),
+    })
+        const data = await response.json()
+       setItem(feedback.map((item) => (item.id === id ? {...item,...data }: item)))
    }
     return <FeedbackContext.Provider value={{
         feedback,

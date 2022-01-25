@@ -1,0 +1,10 @@
+import spinner from "../components/assets/spinner.gif"
+
+
+function Spinner()
+{
+    return (
+        <img src={spinner} style={{width:'100px',margin:'auto',display:'block'}}/>
+    )
+}
+export default Spinner
